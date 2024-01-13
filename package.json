@@ -1,6 +1,7 @@
 {
-  "name": "my-app",
+  "name": "todo-postgres-frontend",
   "version": "0.1.0",
+  "description": "Front-end for todo-postgres app",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -23,5 +24,7 @@
     "tailwindcss": "^3.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.4"
-  }
+  },
+  "author": "Vladyslav Okuskov",
+  "license": "ISC"
 }
