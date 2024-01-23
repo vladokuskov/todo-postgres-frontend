@@ -1,19 +1,50 @@
 'use client';
 
 import React, { useState } from 'react';
+import apiService from '@/services/ApiService';
 
 const RegisterForm = () => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Logging in with:', { email, password });
+  const validateForm = () => {
+    let isValid = true;
+
+    // Validate email
+    if (!email || !password || username) {
+      isValid = false;
+      // Add later notification (toast) system
+      console.error('Password, email or username should be included');
+    }
+
+    return isValid;
+  };
+
+  const handleRegister = async () => {
+    const isValid = validateForm();
+
+    if (!isValid) return console.error('Form validation error');
+
+    try {
+      const res = await apiService.auth.signup({ email, username, password });
+
+      console.log('Registering in with:', { email, username, password });
+
+      if (!res.data || !res.data.responseObject) {
+        return console.error('Error happen while registering');
+      }
+
+      // set user in global state management
+    } catch (err) {
+      console.error('Error happen while registering');
+    }
   };
 
   return (
     <div className='mt-2 w-full p-2'>
       <h1 className='ml-[50%]'>Login</h1>
-      <form className='mx-auto max-w-sm' onSubmit={handleLogin}>
+      <form className='mx-auto max-w-sm' onSubmit={handleRegister}>
         <div className='mb-5'>
           <label
             htmlFor='email'
@@ -34,6 +65,24 @@ const RegisterForm = () => {
 
         <div className='mb-5'>
           <label
+            htmlFor='username'
+            className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+          >
+            Your username
+          </label>
+          <input
+            type='text'
+            id='username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+            placeholder='testName123'
+            required
+          />
+        </div>
+
+        <div className='mb-5'>
+          <label
             htmlFor='email'
             className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
           >
@@ -47,6 +96,7 @@ const RegisterForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             required
+            minLength={8}
           />
         </div>
 

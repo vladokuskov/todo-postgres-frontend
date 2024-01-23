@@ -5,7 +5,7 @@ import { TodoItem } from '@/components/TodoItem';
 
 const initTodos = async (): Promise<ITodo[] | null | undefined> => {
   try {
-    const res = await apiService.user.getTodos();
+    const res = await apiService.todo.getTodos();
     return res.data.responseObject;
   } catch (err) {
     console.error('Failed to load todos');

@@ -1,13 +1,43 @@
 'use client';
 
 import React, { useState } from 'react';
+import apiService from '@/services/ApiService';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Logging in with:', { email, password });
+  const validateForm = () => {
+    let isValid = true;
+
+    // Validate email
+    if (!email || !password) {
+      isValid = false;
+      // Add later notification (toast) system
+      console.error('Password and email should be included');
+    }
+
+    return isValid;
+  };
+
+  const handleLogin = async () => {
+    const isValid = validateForm();
+
+    if (!isValid) return console.error('Email or password validation error');
+
+    try {
+      const res = await apiService.auth.login({ email, password });
+
+      console.log('Logging in with:', { email, password });
+
+      if (!res.data || !res.data.responseObject) {
+        return console.error('Error happen while logging in');
+      }
+
+      // set user in global state management
+    } catch (err) {
+      console.error('Error happen while logging in');
+    }
   };
 
   return (
@@ -47,6 +77,7 @@ const LoginForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             required
+            minLength={8}
           />
         </div>
 
