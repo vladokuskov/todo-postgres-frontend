@@ -16,13 +16,11 @@ const TodosList = async () => {
   const todos = await initTodos();
 
   return (
-    <div className='mt-2 max-w-md p-2'>
+    <ul className='mt-2 flex max-w-md flex-col items-center justify-center gap-2 p-2'>
       <Suspense fallback={<div>Loading ...</div>}>
-        <ul>
-          {todos && todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
-        </ul>
+        {todos && todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
       </Suspense>
-    </div>
+    </ul>
   );
 };
 
