@@ -44,7 +44,7 @@ const RegisterForm = () => {
         sameSite: 'strict',
       });
 
-      router.push('/todos');
+      router.push('/home');
     } catch (err: any) {
       console.error(err.response.data.message);
     }
