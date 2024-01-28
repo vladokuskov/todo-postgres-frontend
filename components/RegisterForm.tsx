@@ -16,10 +16,10 @@ const RegisterForm = () => {
     let isValid = true;
 
     // Validate email
-    if (!email || !password || username) {
+    if (!email || !password) {
       isValid = false;
       // Add later notification (toast) system
-      console.error('Password, email or username should be included');
+      console.error('Password and email should be included');
     }
 
     return isValid;
