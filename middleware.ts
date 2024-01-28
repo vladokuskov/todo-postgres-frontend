@@ -3,9 +3,12 @@ import { authRoutes, protectedRoutes } from '@/router/routes';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const url = request.nextUrl.clone();
 
   const currentUserToken = request.cookies.get('currentUserToken')?.value;
+
+  if (authRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   if (protectedRoutes.includes(pathname) && !currentUserToken) {
     request.cookies.delete('currentUserToken');
@@ -14,7 +17,7 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  if (authRoutes.includes(request.nextUrl.pathname) && currentUserToken) {
-    return NextResponse.redirect(url);
+  if (!authRoutes.includes(pathname) && currentUserToken) {
+    return NextResponse.next();
   }
 }
