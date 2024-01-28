@@ -1,7 +1,8 @@
 import { TodosList } from '@/components/TodosList';
 import { LogOutButton } from '@/components/LogOutButton';
+import { siteConfig } from '@/config/site';
 
-export const metadata = { title: 'Todos' };
+export const metadata = { title: `${siteConfig.name} - Todos` };
 
 export default function TodosPage() {
   return (

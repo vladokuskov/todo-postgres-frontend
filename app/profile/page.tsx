@@ -1,4 +1,6 @@
-export const metadata = { title: 'Profile' };
+import { siteConfig } from '@/config/site';
+
+export const metadata = { title: `${siteConfig.name} - Profile` };
 
 export default function ProfilePage() {
   return (
