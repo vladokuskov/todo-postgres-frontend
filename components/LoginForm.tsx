@@ -2,8 +2,12 @@
 
 import React, { useState } from 'react';
 import apiService from '@/services/ApiService';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const LoginForm = () => {
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +24,8 @@ const LoginForm = () => {
     return isValid;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const isValid = validateForm();
 
     if (!isValid) return console.error('Email or password validation error');
@@ -28,21 +33,25 @@ const LoginForm = () => {
     try {
       const res = await apiService.auth.login({ email, password });
 
-      console.log('Logging in with:', { email, password });
+      if (!res.data.responseObject) return;
 
-      if (!res.data || !res.data.responseObject) {
-        return console.error('Error happen while logging in');
-      }
+      const token = res.data.responseObject.token;
 
-      // set user in global state management
-    } catch (err) {
-      console.error('Error happen while logging in');
+      Cookies.set('currentUserToken', JSON.stringify(token), {
+        expires: 7,
+        secure: true,
+        sameSite: 'strict',
+      });
+
+      router.push('/todos');
+    } catch (err: any) {
+      console.error(err.response.data.message);
     }
   };
 
   return (
     <div className='mt-2 w-full p-2'>
-      <h1 className='ml-[50%]'>Login</h1>
+      <h1 className='w-full text-center'>Login</h1>
       <form className='mx-auto max-w-sm' onSubmit={handleLogin}>
         <div className='mb-5'>
           <label
@@ -83,7 +92,7 @@ const LoginForm = () => {
 
         <button
           type='submit'
-          className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto'
         >
           Login
         </button>

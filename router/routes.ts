@@ -1,3 +1,2 @@
-export const protectedRoutes = ['/profile'];
+export const protectedRoutes = ['/profile', '/todos'];
 export const authRoutes = ['/login', '/signup'];
-export const publicRoutes = ['/todos', '/'];

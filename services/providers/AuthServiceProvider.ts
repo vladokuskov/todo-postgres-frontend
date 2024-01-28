@@ -6,10 +6,13 @@ export class AuthServiceProvider extends ApiBaseServiceProvider {
   scope = 'auth';
 
   login({ email, password }: { email: string; password: string }) {
-    return axios.post<ServiceResponse<any>>(`${this.getBaseUrl()}login`, {
-      email,
-      password,
-    });
+    return axios.post<ServiceResponse<{ token: string }>>(
+      `${this.getBaseUrl()}login`,
+      {
+        email,
+        password,
+      }
+    );
   }
 
   signup({
@@ -21,14 +24,19 @@ export class AuthServiceProvider extends ApiBaseServiceProvider {
     username: string;
     password: string;
   }) {
-    return axios.post<ServiceResponse<any>>(`${this.getBaseUrl()}signup`, {
-      email,
-      username,
-      password,
-    });
+    return axios.post<ServiceResponse<{ token: string }>>(
+      `${this.getBaseUrl()}signup`,
+      {
+        email,
+        username,
+        password,
+      }
+    );
   }
 
   logout() {
-    return axios.post<ServiceResponse<any>>(`${this.getBaseUrl()}logout`);
+    return axios.post<
+      ServiceResponse<{ message: string; isLoggedOut: boolean }>
+    >(`${this.getBaseUrl()}logout`);
   }
 }
