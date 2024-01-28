@@ -1,4 +1,4 @@
-import { RegisterForm } from '@/components/RegisterForm';
+import { RegisterForm } from '@/components/ui/RegisterForm';
 import { siteConfig } from '@/config/site';
 
 export const metadata = { title: `${siteConfig.name} - Signup` };

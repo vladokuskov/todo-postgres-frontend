@@ -1,5 +1,5 @@
 import React from 'react';
-import { ITodo } from '@/@types/ITodo';
+import { ITodo } from '@/models/ITodo';
 
 const TodoItem: React.FC<{ todo: ITodo }> = ({ todo }) => {
   return (

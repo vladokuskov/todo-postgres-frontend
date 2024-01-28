@@ -1,7 +1,7 @@
 import apiService from '@/services/ApiService';
-import { ITodo } from '@/@types/ITodo';
 import { Suspense } from 'react';
-import { TodoItem } from '@/components/TodoItem';
+import { TodoItem } from '@/components/ui/TodoItem';
+import { ITodo } from '@/models/ITodo';
 
 const initTodos = async (): Promise<ITodo[] | null | undefined> => {
   try {
