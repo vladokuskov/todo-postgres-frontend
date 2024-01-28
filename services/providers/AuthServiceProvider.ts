@@ -17,19 +17,19 @@ export class AuthServiceProvider extends ApiBaseServiceProvider {
 
   signup({
     email,
-    username,
     password,
+    username,
   }: {
     email: string;
-    username: string;
     password: string;
+    username: string;
   }) {
     return axios.post<ServiceResponse<{ token: string }>>(
       `${this.getBaseUrl()}signup`,
       {
         email,
-        username,
         password,
+        username,
       }
     );
   }

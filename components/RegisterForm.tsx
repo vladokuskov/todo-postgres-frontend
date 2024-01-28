@@ -2,8 +2,12 @@
 
 import React, { useState } from 'react';
 import apiService from '@/services/ApiService';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 const RegisterForm = () => {
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,29 +25,34 @@ const RegisterForm = () => {
     return isValid;
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const isValid = validateForm();
 
     if (!isValid) return console.error('Form validation error');
 
     try {
-      const res = await apiService.auth.signup({ email, username, password });
+      const res = await apiService.auth.signup({ email, password, username });
 
-      console.log('Registering in with:', { email, username, password });
+      if (!res.data.responseObject) return;
 
-      if (!res.data || !res.data.responseObject) {
-        return console.error('Error happen while registering');
-      }
+      const token = res.data.responseObject.token;
 
-      // set user in global state management
-    } catch (err) {
-      console.error('Error happen while registering');
+      Cookies.set('currentUserToken', JSON.stringify(token), {
+        expires: 7,
+        secure: true,
+        sameSite: 'strict',
+      });
+
+      router.push('/todos');
+    } catch (err: any) {
+      console.error(err.response.data.message);
     }
   };
 
   return (
     <div className='mt-2 w-full p-2'>
-      <h1 className='ml-[50%]'>Login</h1>
+      <h1 className='w-full text-center'>Sign up</h1>
       <form className='mx-auto max-w-sm' onSubmit={handleRegister}>
         <div className='mb-5'>
           <label
@@ -76,8 +85,6 @@ const RegisterForm = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
-            placeholder='testName123'
-            required
           />
         </div>
 
@@ -102,9 +109,9 @@ const RegisterForm = () => {
 
         <button
           type='submit'
-          className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto'
         >
-          Login
+          Sign up
         </button>
       </form>
     </div>
